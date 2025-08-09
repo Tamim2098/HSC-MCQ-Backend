@@ -9,8 +9,20 @@ import adminRoutes from './routes/adminRoutes.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// .env থেকে multiple URLs নিয়ে অ্যারে বানানো
+const allowedOrigins = process.env.FRONTEND_URL.split(',');
+
 const corsOptions = {
-    origin: process.env.FRONTEND_URL, 
+    origin: function(origin, callback) {
+        // Postman or same origin requests এর জন্য origin না থাকলেও allow করবেন
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     optionsSuccessStatus: 200,
 };
 
