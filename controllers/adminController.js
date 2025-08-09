@@ -80,7 +80,6 @@ export const addQuestionsBulk = asyncHandler(async (req, res) => {
 });
 
 
-
 export const getQuestions = async (req, res) => {
   try {
     const questions = await Question.find();
