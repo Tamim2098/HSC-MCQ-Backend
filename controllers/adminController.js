@@ -2,6 +2,7 @@ import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import Question from '../models/Question.js';
 import dotenv from 'dotenv'; 
+import asyncHandler from 'express-async-handler';
 
 dotenv.config();
 
@@ -63,6 +64,21 @@ export const addQuestion = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const addQuestionsBulk = asyncHandler(async (req, res) => {
+  const questions = req.body; 
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return res.status(400).json({ message: 'Invalid input. Expected an array of questions.' });
+  }
+
+  const insertedQuestions = await Question.insertMany(questions);
+
+  res.status(201).json({ 
+    message: `${insertedQuestions.length} questions added successfully`, 
+    questions: insertedQuestions 
+  });
+});
+
 
 export const getQuestions = async (req, res) => {
   try {

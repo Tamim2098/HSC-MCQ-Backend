@@ -6,6 +6,7 @@ import {
   getQuestions,
   updateQuestion,
   deleteQuestion,
+  addQuestionsBulk, 
 } from '../controllers/adminController.js';
 import { protect } from '../middlewares/authMiddleware.js'; 
 
@@ -35,6 +36,9 @@ router.post(
   ],
   addQuestion
 );
+
+
+router.post('/add-questions-bulk', protect, addQuestionsBulk); 
 
 router.get('/questions', protect, getQuestions); 
 
